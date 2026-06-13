@@ -9,13 +9,12 @@ def manipular_dados(dados):
                         'price': 'preco',
                         'rating': 'nota',
                         'stock': 'estoque',
-                        'brand': 'marca',
-                        'thumbnail': 'imagem'})
+                        'brand': 'marca',})
     
     df = df.drop(columns=['tags', 'dimensions', 'reviews', 'meta', 'weight',
                           'warrantyInformation', 'shippingInformation',
                           'availabilityStatus', 'returnPolicy', 'minimumOrderQuantity',
-                          'sku', 'discountPercentage', 'images'
+                          'sku', 'discountPercentage', 'images', 'thumbnail'
                           ])
     
     df['valor_total_estoque'] = df['estoque'] * df['preco']
@@ -41,6 +40,10 @@ def manipular_dados(dados):
         (score - score.min()) /
         (score.max() - score.min())
     ) * 100
+
+    df['status_score'] = df['score_produto'].apply(lambda x: 'Excelente' if x >= 75
+                                                   else 'Bom' if x >= 40
+                                                   else 'Ruim')
 
     return df
     
