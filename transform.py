@@ -44,7 +44,19 @@ def manipular_dados(dados):
     df['status_score'] = df['score_produto'].apply(lambda x: 'Excelente' if x >= 75
                                                    else 'Bom' if x >= 40
                                                    else 'Ruim')
+    
+    df['categoria_id'] = df['categoria'].index + 1
+    df['marca_id'] = df['marca'].index + 1
+    
+    dim_produto = list(zip(df['id'].tolist(), df['nome'].tolist(), df['descricao'].tolist()))
+    dim_categoria = list(zip(df['categoria'].tolist()))
+    dim_marca = list(zip(df['marca'].tolist()))
+    fato_produtos = list(zip(df['preco'].tolist(), df['nota'].tolist(), df['estoque'].tolist(),
+                             df['valor_total_estoque'].tolist(), df['score_produto'].tolist(),
+                             df['nivel_estoque'].tolist(), df['nivel_avaliacao'].tolist(),
+                             df['preco_relativo'].tolist(), df['status_score'].tolist(),
+                             df['id'].tolist(), df['categoria_id'].tolist(), df['marca_id'].tolist()))
 
-    return df
+    return df, dim_produto, dim_categoria, dim_marca, fato_produtos
     
     
