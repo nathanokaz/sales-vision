@@ -2,10 +2,10 @@ import mysql.connector
 import pandas
 
 def cria_csvs(resultado):
-    resultado[4].to_csv('csvs/fato_produtos.csv', sep=';', index=False)
-    resultado[5].to_csv('csvs/dim_produtos.csv', sep=';', index=False)
-    resultado[6].to_csv('csvs/dim_categorias.csv', sep=';', index=False)
-    resultado[7].to_csv('csvs/dim_marcas.csv', sep=';', index=False)
+    resultado[4].to_csv('dados/fato_produtos.csv', sep=';', index=False)
+    resultado[5].to_csv('dados/dim_produtos.csv', sep=';', index=False)
+    resultado[6].to_csv('dados/dim_categorias.csv', sep=';', index=False)
+    resultado[7].to_csv('dados/dim_marcas.csv', sep=';', index=False)
 
 def conectar_banco():
     conexao = mysql.connector.connect(host='localhost', database='teste', user='root', password='8676')
