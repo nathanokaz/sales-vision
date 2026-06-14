@@ -112,6 +112,7 @@ def criar_listas(data_frame, dim_categorias, dim_marcas):
 def manipular_dados(dados):
     print('[TRANSFORM] Manipulando e tratando dados')
 
+    # Faz a tradução porém removido devido ao tempo de execução do código
     #tradutor = GoogleTranslator(source='en', target='pt')
     #df['descricao'] = df['descricao'].apply(lambda x: tradutor.translate(x))
     #df['nome'] = df['nome'].apply(lambda x: tradutor.translate(x))
