@@ -1,6 +1,8 @@
 import pandas 
+from deep_translator import GoogleTranslator
 
 def manipular_dados(dados):
+
     df = pandas.DataFrame(dados['products'])
     
     df = df.rename(columns={'title': 'nome',
@@ -45,12 +47,45 @@ def manipular_dados(dados):
                                                    else 'Bom' if x >= 40
                                                    else 'Ruim')
     
+    df['marca'].drop_duplicates()
+    df['marca'].fillna('Sem marca')
+
+    dicionario_categorias = {
+        'beauty' : 'Beleza',
+        'fragrances' : 'Fragrâncias',
+        'groceries' : 'Compras',
+        'furniture' : 'Móveis',
+        'home-decoration' : 'Decoração casa',
+        'kitchen-accessories' : 'Acessórios cozinha',
+        'laptops' : 'Notebooks',
+        'mens-shirts' : 'Camisetas masculinas',
+        'mens-watches' : 'Relogios masculinos',
+        'mobile-accessories' : 'Acessórios para celular',
+        'motorcycle' : 'Motos',
+        'skin-care' : 'Skin care',
+        'smartphones' : 'Celulares',
+        'sports-accessories' : 'Acessórios esportivos',
+        'sunglasses' : 'Óculos de sol',
+        'tablets' : 'Tablets',
+        'tops' : 'Tops',
+        'vehicle' : 'Veículos',
+        'womens-bags' : 'Bolsas Femininas',
+        'womens-dresses' : 'Vestidos Femininos',
+        'womens-jewellery' : 'Jóias',
+        'womens-shoes' : 'Tênis feminino',
+        'womens-watches' : 'Relógios femininos',
+        'mens-shoes' : 'Tênis masculino'
+    }
+
+    df['marca'] = df['marca'].fillna('Sem marca')
+    df['categoria'] = df['categoria'].map(dicionario_categorias)
+
     df['categoria_id'] = df['categoria'].index + 1
     df['marca_id'] = df['marca'].index + 1
     
     dim_produto = list(zip(df['id'].tolist(), df['nome'].tolist(), df['descricao'].tolist()))
-    dim_categoria = list(zip(df['categoria'].tolist()))
-    dim_marca = list(zip(df['marca'].tolist()))
+    dim_categoria = list(zip(df['categoria'].drop_duplicates().tolist()))
+    dim_marca = list(zip(df['marca'].drop_duplicates().tolist()))
     fato_produtos = list(zip(df['preco'].tolist(), df['nota'].tolist(), df['estoque'].tolist(),
                              df['valor_total_estoque'].tolist(), df['score_produto'].tolist(),
                              df['nivel_estoque'].tolist(), df['nivel_avaliacao'].tolist(),
