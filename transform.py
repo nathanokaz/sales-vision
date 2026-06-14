@@ -3,6 +3,10 @@ from deep_translator import GoogleTranslator
 
 def manipular_dados(dados):
 
+    print('[TRANSFORM] Manipulando e tratando dados')
+
+    tradutor = GoogleTranslator(source='en', target='pt')
+
     df = pandas.DataFrame(dados['products'])
     
     df = df.rename(columns={'title': 'nome',
@@ -19,7 +23,7 @@ def manipular_dados(dados):
                           'sku', 'discountPercentage', 'images', 'thumbnail'
                           ])
     
-    df['valor_total_estoque'] = df['estoque'] * df['preco']
+    df['valor_total_estoque'] = round(df['estoque'] * df['preco'], 2)
 
     df['nivel_estoque'] = df['estoque'].apply(lambda x: 'Alto risco' if x < 10
                                               else 'Médio risco' if x < 30
@@ -33,15 +37,8 @@ def manipular_dados(dados):
     df['preco_relativo'] = df['preco'].apply(lambda x: 'Acima da média' if x > media_preco
                                              else 'Abaixo da média')
     
-    score = (
-        df['nota'] * 2 +
-        (df['estoque'] / 10) -
-        (df['preco'] / 1000)
-    )
-    df['score_produto'] = (
-        (score - score.min()) /
-        (score.max() - score.min())
-    ) * 100
+    score = (df['nota'] * 2 + (df['estoque'] / 10) - (df['preco'] / 1000))
+    df['score_produto'] = round(((score - score.min()) / (score.max() - score.min())) * 100, 2)
 
     df['status_score'] = df['score_produto'].apply(lambda x: 'Excelente' if x >= 75
                                                    else 'Bom' if x >= 40
@@ -82,6 +79,9 @@ def manipular_dados(dados):
 
     df['categoria_id'] = df['categoria'].index + 1
     df['marca_id'] = df['marca'].index + 1
+
+    df['descricao'] = df['descricao'].apply(lambda x: tradutor.translate(x))
+    df['nome'] = df['nome'].apply(lambda x: tradutor.translate(x))
     
     dim_produto = list(zip(df['id'].tolist(), df['nome'].tolist(), df['descricao'].tolist()))
     dim_categoria = list(zip(df['categoria'].drop_duplicates().tolist()))
