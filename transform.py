@@ -77,15 +77,23 @@ def manipular_dados(dados):
     df['marca'] = df['marca'].fillna('Sem marca')
     df['categoria'] = df['categoria'].map(dicionario_categorias)
 
-    df['categoria_id'] = df['categoria'].index + 1
-    df['marca_id'] = df['marca'].index + 1
+    df_categoria = df[['categoria']].drop_duplicates().reset_index(drop=True)
+    df_categoria['categoria_id'] = df_categoria.index + 1
+    df['categoria_id'] = df['categoria'].map(dict(zip(df_categoria['categoria'], df_categoria['categoria_id'])))
 
-    df['descricao'] = df['descricao'].apply(lambda x: tradutor.translate(x))
-    df['nome'] = df['nome'].apply(lambda x: tradutor.translate(x))
+    df_marca = df[['marca']].drop_duplicates().reset_index(drop=True)
+    df_marca['marca_id'] = df_marca.index + 1
+    df['marca_id'] = df['marca'].map(dict(zip(df_marca['marca'], df_marca['marca_id'])))
+
+    #df['descricao'] = df['descricao'].apply(lambda x: tradutor.translate(x))
+    #df['nome'] = df['nome'].apply(lambda x: tradutor.translate(x))
     
     dim_produto = list(zip(df['id'].tolist(), df['nome'].tolist(), df['descricao'].tolist()))
-    dim_categoria = list(zip(df['categoria'].drop_duplicates().tolist()))
-    dim_marca = list(zip(df['marca'].drop_duplicates().tolist()))
+    
+    dim_categoria = list(zip(df_categoria['categoria_id'].tolist(), df_categoria['categoria'].tolist()))
+    
+    dim_marca = list(zip(df_marca['marca_id'].tolist(), df_marca['marca'].tolist()))
+    
     fato_produtos = list(zip(df['preco'].tolist(), df['nota'].tolist(), df['estoque'].tolist(),
                              df['valor_total_estoque'].tolist(), df['score_produto'].tolist(),
                              df['nivel_estoque'].tolist(), df['nivel_avaliacao'].tolist(),

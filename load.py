@@ -18,13 +18,13 @@ def criar_base_de_dados(df, dim_produto, dim_categoria, dim_marca, fato_produtos
     print('[LOAD] Criada table dim_produto')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS dim_categorias (
-                   categoria_id INT PRIMARY KEY AUTO_INCREMENT,
+                   categoria_id INT PRIMARY KEY,
                    categoria VARCHAR(50))''')
     conexao.commit()
     print('[LOAD] Criada table dim_categoria')
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS dim_marcas (
-                   marca_id INT PRIMARY KEY AUTO_INCREMENT,
+                   marca_id INT PRIMARY KEY,
                    marca VARCHAR(50))''')
     conexao.commit()
     print('[LOAD] Criada table dim_marcas')
@@ -56,13 +56,13 @@ def criar_base_de_dados(df, dim_produto, dim_categoria, dim_marca, fato_produtos
     conexao.commit()
     print('[LOAD] Insert realizado em: dim_produtos')
 
-    cursor.executemany('''INSERT IGNORE INTO dim_categorias (categoria)
-                       VALUES (%s)''', dim_categoria)
+    cursor.executemany('''INSERT IGNORE INTO dim_categorias (categoria_id, categoria)
+                       VALUES (%s, %s)''', dim_categoria)
     conexao.commit()
     print('[LOAD] Insert realizado em: dim_categorias')
 
-    cursor.executemany('''INSERT IGNORE INTO dim_marcas (marca)
-                       VALUES (%s)''', dim_marca)
+    cursor.executemany('''INSERT IGNORE INTO dim_marcas (marca_id, marca)
+                       VALUES (%s, %s)''', dim_marca)
     conexao.commit()
     print('[LOAD] Insert realizado em: dim_marcas')
 
