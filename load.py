@@ -1,8 +1,11 @@
 import mysql.connector
+import pandas
 
-def criar_base_de_dados(df, dim_produto, dim_categoria, dim_marca, fato_produtos):
-
-    df.to_csv('dados.csv', sep=';', index=False)
+def criar_base_de_dados(resultado):
+    resultado[4].to_csv('fato_produtos.csv', sep=';', index=False)
+    resultado[5].to_csv('dim_produtos.csv', sep=';', index=False)
+    resultado[6].to_csv('dim_categorias.csv', sep=';', index=False)
+    resultado[7].to_csv('dim_marcas.csv', sep=';', index=False)
     
     conexao = mysql.connector.connect(host='localhost', database='sales_vision', user='root', password='8676')
     
@@ -52,17 +55,17 @@ def criar_base_de_dados(df, dim_produto, dim_categoria, dim_marca, fato_produtos
     print('[LOAD] Criada table fato_produtos')
 
     cursor.executemany('''INSERT IGNORE INTO dim_produtos (produto_id, nome, descricao)
-                   VALUES (%s, %s, %s)''', dim_produto)
+                   VALUES (%s, %s, %s)''', resultado[0])
     conexao.commit()
     print('[LOAD] Insert realizado em: dim_produtos')
 
     cursor.executemany('''INSERT IGNORE INTO dim_categorias (categoria_id, categoria)
-                       VALUES (%s, %s)''', dim_categoria)
+                       VALUES (%s, %s)''', resultado[1])
     conexao.commit()
     print('[LOAD] Insert realizado em: dim_categorias')
 
     cursor.executemany('''INSERT IGNORE INTO dim_marcas (marca_id, marca)
-                       VALUES (%s, %s)''', dim_marca)
+                       VALUES (%s, %s)''', resultado[2])
     conexao.commit()
     print('[LOAD] Insert realizado em: dim_marcas')
 
@@ -70,7 +73,7 @@ def criar_base_de_dados(df, dim_produto, dim_categoria, dim_marca, fato_produtos
                        (preco, nota, estoque, valor_total_estoque, score_produto,
                        nivel_estoque, nivel_avaliacao, preco_relativo, status_score,
                        produto_id, categoria_id, marca_id)
-                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', fato_produtos)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', resultado[3])
     conexao.commit()
     print('[LOAD] Insert realizado em: fato_produtos')
 
