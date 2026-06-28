@@ -34,7 +34,7 @@ def criar_tables(banco_de_dados):
     print('[LOAD] Criada table dim_marcas')
 
     banco_de_dados[1].execute('''CREATE TABLE IF NOT EXISTS fato_produtos (
-                   id INT PRIMARY KEY AUTO_INCREMENT,
+                   id INT PRIMARY KEY,
                    preco DECIMAL(10,2),
                    nota DECIMAL(4,2),
                    estoque INT,
@@ -76,10 +76,10 @@ def insert_dim_marcas(banco_de_dados, resultado):
 
 def insert_fato_produtos(banco_de_dados, resultado):
     banco_de_dados[1].executemany('''INSERT IGNORE INTO fato_produtos
-                       (preco, nota, estoque, valor_total_estoque, score_produto,
+                       (id, preco, nota, estoque, valor_total_estoque, score_produto,
                        nivel_estoque, nivel_avaliacao, preco_relativo, status_score,
                        produto_id, categoria_id, marca_id)
-                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', resultado[3])
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', resultado[3])
     banco_de_dados[0].commit()
     print('[LOAD] Insert realizado em: fato_produtos')
 

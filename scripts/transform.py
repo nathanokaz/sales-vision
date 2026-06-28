@@ -99,7 +99,7 @@ def criar_listas(data_frame, dim_categorias, dim_marcas):
     
     lista_dim_marcas = list(zip(dim_marcas['marca_id'].tolist(), dim_marcas['marca'].tolist()))
     
-    lista_produtos = list(zip(data_frame['preco'].tolist(), data_frame['nota'].tolist(), data_frame['estoque'].tolist(),
+    lista_produtos = list(zip(data_frame['id'], data_frame['preco'].tolist(), data_frame['nota'].tolist(), data_frame['estoque'].tolist(),
                              data_frame['valor_total_estoque'].tolist(), data_frame['score_produto'].tolist(),
                              data_frame['nivel_estoque'].tolist(), data_frame['nivel_avaliacao'].tolist(),
                              data_frame['preco_relativo'].tolist(), data_frame['status_score'].tolist(),
