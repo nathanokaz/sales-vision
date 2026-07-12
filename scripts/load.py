@@ -7,7 +7,7 @@ def cria_csvs(resultado):
     resultado['dim_marcas'].to_csv('dados/dim_marcas.csv', sep=';', index=False)
 
 def conectar_banco():
-    conexao = mysql.connector.connect(host='localhost', database='teste', user='root', password='8676')
+    conexao = mysql.connector.connect(host='localhost', database='nome', user='user', password='senha')
 
     if conexao.is_connected():
         print('[LOAD] Conectado ao banco de dados')
